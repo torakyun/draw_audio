@@ -15,17 +15,6 @@
 <title>Draw Audio</title>
 </head>
 <body>
-<!--
-<button id="playBtn">Play</button><br>
-音量：<input type="range" id="volSlider" max=1 min=0 step=0.1 value=1><br>
-<select id="typeSel">
-    <option value="sine">正弦波</option>
-    <option value="square">矩形波</option>
-    <option value="sawtooth">のこぎり波</option>
-    <option value="triangle">三角波</option>
-</select><br>
-音高：<input type="range" id="frequencySlider" max=880 min=220 step=1 value=440><br>
--->
 <canvas id="myCanvas"></canvas>
 
 <div class="card">
@@ -44,17 +33,21 @@
 <script>
     window.onload = function(){
         drawBackground();
+        fitCanvasSize();
+        window.onresize = fitCanvasSize;
     }
 
     // <canvas id="???"> の???を指定してcanvasを取得
-    canvas = document.getElementById("myCanvas");
-    
+    var canvas = document.getElementById("myCanvas");
+
+    function fitCanvasSize() {
+        // Canvas のサイズをクライアントサイズに合わせる
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+    }
+
     // clickした回数
     var num = 0;
-
-    // ドキュメントの表示領域のサイズをCanvasのサイズとして設定
-    canvas.width = document.documentElement.clientWidth;
-    canvas.height = document.documentElement.clientHeight; 
 
     // 各種ブラウザ対応
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -159,18 +152,17 @@
     function drawGraph(e, wav){
         options = {strokeColor : '#000',
                 strokeWidth : 0,
-                fillColor : "rgb(" + 131 + "," + 196 + "," + 238 +")"};
+                fillColor : "rgb(" + rnd() + "," + rnd() + "," + rnd() +")"};
 
-        // if (wav == 'sine') {
-        //     drawCircle(canvas, e.clientX, e.clientY, volume * 200, options);
-        // } else if (wav == 'square') {
-        //     drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 4, options);
-        // } else if (wav == 'sawtooth') {
-        //     drawStar(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 20, volume * 30, volume * 30, options);
-        // } else if (wav == 'triangle') {
-        //     drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 3, options);
-        // }
-        drawCircle(canvas, e.clientX, e.clientY, 200, options);
+        if (wav == 'sine') {
+            drawCircle(canvas, e.clientX, e.clientY, volume * 200, options);
+        } else if (wav == 'square') {
+            drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 4, options);
+        } else if (wav == 'sawtooth') {
+            drawStar(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 20, volume * 30, volume * 30, options);
+        } else if (wav == 'triangle') {
+            drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 3, options);
+        }
 
         // 乱数を返す
         function rnd(){
