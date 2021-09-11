@@ -17,7 +17,7 @@
 
 <p align="center">
     <img width="1439" alt="test" src="https://user-images.githubusercontent.com/67317828/132638737-5f681956-05f7-459d-ae93-70b528086f51.png">
-    参照: <a href=https://www.gizmodo.jp/2017/06/how-to-synth.html>シンセサイザーってなに？ 仕組みから楽しみ方までを解説</a>
+    参照: <a href=https://www.gizmodo.jp/2017/06/how-to-synth.html>シンセサイザーってなに？仕組みから楽しみ方までを解説</a>
 
 つまり、基本波形の特徴を覚えておくことが、新しい楽音を作る上で重要となる。  
 今回は、基本波形の特徴を「聴覚的」かつ、「視覚的」にも楽しみながら体感できるWebアプリケーションを開発した。
