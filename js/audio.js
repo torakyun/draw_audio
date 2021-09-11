@@ -33,7 +33,7 @@ var createAudio = function(){
 
     // 乱数を返す
     function rnd_wav(){
-        const wav = ['sine', 'square', 'sawtooth', 'triangle'];
+        const wav = ['sine', 'sawtooth', 'triangle', 'square'];
         return wav[Math.floor(Math.random() * 4)];
     }
 }

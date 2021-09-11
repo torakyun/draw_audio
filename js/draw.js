@@ -7,12 +7,12 @@ var drawGraph = function(canvas, e, type, volume){
     // 波形に応じた図形の表示
     if (type == 'sine') {
         drawCircle(canvas, e.clientX, e.clientY, volume * 200, options);
-    } else if (type == 'square') {
-        drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 4, options);
     } else if (type == 'sawtooth') {
         drawStar(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 20, volume * 30, volume * 30, options);
     } else if (type == 'triangle') {
         drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 3, options);
+    } else if (type == 'square') {
+        drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 4, options);
     }
 
     // 乱数を返す

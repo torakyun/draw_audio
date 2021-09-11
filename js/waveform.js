@@ -6,12 +6,12 @@ var waveform = function(){
     let url;
     if (type == 'sine') {
         url = "https://en.wikipedia.org/wiki/Sine_wave";
-    } else if (type == 'square') {
-        url = "https://en.wikipedia.org/wiki/Square_wave";
     } else if (type == 'sawtooth') {
         url = "https://en.wikipedia.org/wiki/Sawtooth_wave";
     } else if (type == 'triangle') {
         url = "https://en.wikipedia.org/wiki/Triangle_wave";
+    } else if (type == 'square') {
+        url = "https://en.wikipedia.org/wiki/Square_wave";
     }
 
     // 1回目のクリック -> テキストボックス + 波形の種類の表示
