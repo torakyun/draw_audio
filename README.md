@@ -15,9 +15,12 @@
 [アナログシンセサイザー][draw_audio]は、[オシレーター(VCO: Voltage-Controlled Oscillator)][oscillator]で作った基本波形を組み合わせることで、新しい楽音の合成を行うことができる楽器である。(詳しくは、[オシレーター(VCO)][oscillator]で作った波形を、[フィルター(VCF)][filter]で加工し、[アンプ(VCA)][amplifier]で音量を調節するという手順を踏む。)  
 ここで基本波形というのは、[サイン波][sine]、[ノコギリ波][sawtooth]、[三角波][triangle]、[矩形波][square]などの単純な波形のことをいう。  
 
-<p align="center">
+<!-- <p align="center">
     <img width="1439" alt="test" src="https://user-images.githubusercontent.com/67317828/132638737-5f681956-05f7-459d-ae93-70b528086f51.png">
-    参照: <a href=https://www.gizmodo.jp/2017/06/how-to-synth.html>シンセサイザーってなに？ 仕組みから楽しみ方までを解説</a>
+    参照: <a href=https://www.gizmodo.jp/2017/06/how-to-synth.html>シンセサイザーってなに？ 仕組みから楽しみ方までを解説</a> -->
+> ![waveform](https://user-images.githubusercontent.com/67317828/132638737-5f681956-05f7-459d-ae93-70b528086f51.png)
+> 参照: [シンセサイザーってなに？ 仕組みから楽しみ方までを解説][cite1]
+
 
 つまり、基本波形の特徴を覚えておくことが、新しい楽音を作る上で重要となる。  
 今回は、基本波形の特徴を「聴覚的」かつ、「視覚的」にも楽しみながら体感できるWebアプリケーションを開発した。
@@ -63,3 +66,5 @@
 [sawtooth]: https://en.wikipedia.org/wiki/Sawtooth_wave
 [triangle]: https://en.wikipedia.org/wiki/Triangle_wave
 [square]: https://en.wikipedia.org/wiki/Square_wave
+
+[cite1]: https://www.gizmodo.jp/2017/06/how-to-synth.html
