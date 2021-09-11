@@ -1,365 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<!-- ネットワークのcreatejsのファイル -->
-<script src="https://code.createjs.com/easeljs-0.6.0.min.js"></script>
-<style>
-    body
-    {
-        margin: 0;
-        background-color: white;
-    }
-</style>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<title>Draw Audio</title>
-</head>
-<body>
-<canvas id="myCanvas"></canvas>
-
-<div class="card">
-    <div class="card-content">
-        <h1>DRAW AUDIO</h1>
-        <p><small>by <a href="https://github.com/torakyun" target="_blank">torakyun</a></small></p>
-        <p class="related"><strong>Click your screen!</strong></p>
-    </div>
-</div>
-
-<div id="wav"></div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript" src="js/hover.js"></script>
-
-<script>
-    window.onload = function(){
-        drawBackground();
-        fitCanvasSize();
-        window.onresize = fitCanvasSize;
-    }
-
-    // <canvas id="???"> の???を指定してcanvasを取得
-    var canvas = document.getElementById("myCanvas");
-
-    function fitCanvasSize() {
-        // Canvas のサイズをクライアントサイズに合わせる
-        canvas.width = document.documentElement.clientWidth;
-        canvas.height = document.documentElement.clientHeight;
-    }
-
-    // clickした回数
-    var num = 0;
-
-    // 各種ブラウザ対応
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    // AudioContextのインスタンスを作成
-    var context = new AudioContext();
-    // 出力先
-    var destinationNode = context.destination;
-    // 音量：gainNode
-    var gainNode = context.createGain();
-    var volume = gainNode.gain.value
-    const volume_divide = 8
-    // 波形
-    var type = "sine";
-    // 周波数
-    var frequency = 440;
-    // 接続：gainNode => destinationNode
-    gainNode.connect(destinationNode);
-
-    //analyserNodeを作成
-    var analyserNode = context.createAnalyser();
-    //高速フーリエ変換のデータサイズ(2のべき乗)
-    analyserNode.fftSize = 2 ** 11;
-    // 接続：gainNode => analyserNode
-    gainNode.connect(analyserNode);
-
-    // オシレーター：波形生成
-    var oscillatorNode = context.createOscillator();
-
-    canvas.addEventListener('mousedown',get);
-    function get(e){
-        console.log(e.clientX + ", " + e.clientY);
-    }
-
-    canvas.addEventListener('mousedown', e => {
-        createAudio()
-        play()
-        // 追加する要素を作成します
-        let url;
-        if (type == 'sine') {
-            url = "https://en.wikipedia.org/wiki/Sine_wave"
-        } else if (type == 'square') {
-            url = "https://en.wikipedia.org/wiki/Square_wave"
-        } else if (type == 'sawtooth') {
-            url = "https://en.wikipedia.org/wiki/Sawtooth_wave"
-        } else if (type == 'triangle') {
-            url = "https://en.wikipedia.org/wiki/Triangle_wave"
-        }
-        if (num === 0) {
-            document.getElementById("wav").classList.add("iklan");
-            let newElement = document.createElement("p"); // 要素作成
-            let newContent = document.createTextNode("Which waveform? "); // テキストノードを作成
-            newElement.setAttribute("style","display:inline;"); // 要素にidを設定
-            newElement.appendChild(newContent); // 要素にテキストノードを追加
-            document.getElementById("wav").insertBefore(newElement, null);
-            newElement = document.createElement("a"); // 要素作成
-            newContent = document.createTextNode(type); // テキストノードを作成
-            newElement.appendChild(newContent); // 要素にテキストノードを追加
-            newElement.setAttribute("id","type"); // 要素にidを設定
-            newElement.setAttribute("href",url); // 要素にidを設定
-            document.getElementById("wav").insertBefore(newElement, null);
-            newElement = document.createElement("canvas"); // 要素作成
-            newElement.setAttribute("id","canvas"); // 要素にidを設定
-            document.getElementById("wav").insertBefore(newElement, null);
-        } else {
-            let element = document.getElementById("type");
-            element.innerHTML=type;
-            element.setAttribute("href",url); // 要素にidを設定
-        }
-        let canvas = document.getElementById("canvas");
-        let canvasCtx = canvas.getContext("2d");
-        let intervalid = window.setInterval(function(){
-            //時間領域の波形描画に必要なデータを取得
-            let times = new Uint8Array(analyserNode.fftSize);
-            analyserNode.getByteTimeDomainData(times);
-            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-            canvasCtx.beginPath();
-            //オシロスコープ
-            for(let i=0; i<times.length; i++){
-                //正規化(0〜1)
-                let x = (i/times.length) * canvas.width;
-                let y = (0.5-times[i]/255) * canvas.height / 3 * volume_divide + 40;
-                //線の開始座標とパスを定義
-                if(i === 0){
-                    canvasCtx.moveTo(x, y);
-                } else {
-                    canvasCtx.lineTo(x, y);
-                }
-                //線を引く
-                canvasCtx.stroke();
+    <head>
+        <meta charset="utf-8">
+        <!-- ネットワークのcreatejsのファイル -->
+        <script src="https://code.createjs.com/easeljs-0.6.0.min.js"></script>
+        <style>
+            body
+            {
+                margin: 0;
+                background-color: white;
             }
-        }, 10);
+        </style>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <title>Draw Audio</title>
+    </head>
 
-        drawGraph(e, type);
+    <body>
+        <canvas id="myCanvas"></canvas>
+        <div id="wav"></div>
 
-        num++;
-    });
+        <div class="card">
+            <div class="card-content">
+                <h1>DRAW AUDIO</h1>
+                <p><small>by <a href="https://github.com/torakyun" target="_blank">torakyun</a></small></p>
+                <p class="related"><strong>Click your screen!</strong></p>
+            </div>
+        </div>
 
-    function drawBackground(){
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript" src="js/setting.js"></script>
+        <script type="text/javascript" src="js/hover.js"></script>
+        <script type="text/javascript" src="js/waveform.js"></script>
+        <script type="text/javascript" src="js/audio.js"></script>
+        <script type="text/javascript" src="js/draw.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
 
-    }
-
-    function drawGraph(e, wav){
-        options = {strokeColor : '#000',
-                strokeWidth : 0,
-                fillColor : "rgb(" + rnd() + "," + rnd() + "," + rnd() +")"};
-
-        if (wav == 'sine') {
-            drawCircle(canvas, e.clientX, e.clientY, volume * 200, options);
-        } else if (wav == 'square') {
-            drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 4, options);
-        } else if (wav == 'sawtooth') {
-            drawStar(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 20, volume * 30, volume * 30, options);
-        } else if (wav == 'triangle') {
-            drawPolygon(canvas, e.clientX, e.clientY, volume * 200, Math.floor(Math.random() * 360), 3, options);
-        }
-
-        // 乱数を返す
-        function rnd(){
-            return Math.floor(Math.floor(Math.random() * 255));
-        }
-    }
-
-    function drawCircle(canvas, cx, cy, viewRadius, options){
-        var ctx, strokeColor, strokeWidth, fillColor;
-        var r;
-    
-        ctx = canvas.getContext('2d');
-    
-        strokeColor = (options && options.strokeColor) ? options.strokeColor : '#000';
-        strokeWidth = (options && options.strokeWidth) ? options.strokeWidth : 0;
-        fillColor   = (options && options.fillColor)   ? options.fillColor   : '#000';
-    
-        ctx.save();
-        ctx.beginPath();
-
-        ctx.arc(cx, cy, viewRadius, 0, 2*Math.PI);
-        
-        ctx.closePath();
-    
-        if (fillColor !== 'transparent') {
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-        }
-
-        if (strokeColor !== 'transparent' && strokeWidth > 0) {
-            ctx.lineWidth   = strokeWidth;
-            ctx.strokeStyle = strokeColor;
-            ctx.stroke();
-        }
-
-        ctx.restore();
-
-        return canvas;
-    }
-
-    var drawPolygon = function(canvas, cx, cy, viewRadius, baseRadian, points, options) {
-        var i, x, y, ratio, radians, angle, oneAngle, base, height;
-        var ctx, strokeColor, strokeWidth, fillColor;
-    
-        ctx = canvas.getContext('2d');
-    
-        ratio = (1 + Math.cos(Math.PI / points)) / 2;
-        viewRadius /= ratio;
-    
-        oneAngle = 360 / points;
-    
-        strokeColor = (options && options.strokeColor) ? options.strokeColor : '#000';
-        strokeWidth = (options && options.strokeWidth) ? options.strokeWidth : 0;
-        fillColor   = (options && options.fillColor)   ? options.fillColor   : '#000';
-    
-        ctx.save();
-        ctx.beginPath();
-    
-        for (i = 0; i < points; i++) {
-            angle       = baseRadian + (oneAngle * i);
-            radians     = angle * (Math.PI / 180);
-    
-            base   = viewRadius * Math.cos(radians);
-            height = viewRadius * Math.sin(radians);
-    
-            x = cx + base;
-            y = cy + height;
-    
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-    
-        ctx.closePath();
-    
-        if (fillColor !== 'transparent') {
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-        }
-    
-        if (strokeColor !== 'transparent' && strokeWidth > 0) {
-            ctx.lineWidth   = strokeWidth;
-            ctx.strokeStyle = strokeColor;
-            ctx.stroke();
-        }
-    
-        ctx.restore();
-    
-        return canvas;
-    };
-
-    var drawStar = function(canvas, cx, cy, viewRadius, baseRadian, points, outerRadius, innerRadius, options) {
-        var i, x, y, radians, halfRadians, angle, oneAngle, base, height;
-        var ctx, strokeColor, strokeWidth, fillColor;
-    
-        ctx = canvas.getContext('2d');
-    
-        ratio = (1 + Math.cos(Math.PI / (points * 2))) / 2;
-        viewRadius /= ratio;
-        outerRadius = (outerRadius) ? outerRadius : 0;
-        innerRadius = (innerRadius) ? innerRadius : 0;
-    
-        oneAngle = 360 / points;
-    
-        strokeColor = (options && options.strokeColor) ? options.strokeColor : '#000';
-        strokeWidth = (options && options.strokeWidth) ? options.strokeWidth : 0;
-        fillColor   = (options && options.fillColor)   ? options.fillColor   : '#000';
-    
-        ctx.save();
-        ctx.beginPath();
-    
-        for (i = 0; i < points; i++) {
-            angle       = baseRadian + (oneAngle * i);
-            radians     = angle * (Math.PI / 180);
-            halfRadians = (angle + (oneAngle / 2)) * (Math.PI / 180);
-    
-            base   = (viewRadius + outerRadius) * Math.cos(radians);
-            height = (viewRadius + outerRadius) * Math.sin(radians);
-    
-            x = cx + base;
-            y = cy + height;
-    
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-    
-            base   = (viewRadius - innerRadius) * Math.cos(halfRadians);
-            height = (viewRadius - innerRadius) * Math.sin(halfRadians);
-    
-            x = cx + base;
-            y = cy + height;
-    
-            ctx.lineTo(x, y);
-        }
-    
-        ctx.closePath();
-    
-        if (fillColor !== 'transparent') {
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-        }
-    
-        if (strokeColor !== 'transparent' && strokeWidth > 0) {
-            ctx.lineWidth   = strokeWidth;
-            ctx.strokeStyle = strokeColor;
-            ctx.stroke();
-        }
-    
-        ctx.restore();
-    
-        return canvas;
-    };
-
-    // 再生する
-    function play(){
-        
-        if (num>0) {
-            oscillatorNode.stop(0);
-        }
-
-        // オシレーター：波形生成
-        oscillatorNode = context.createOscillator();
-
-        // 波形を設定
-        oscillatorNode.type = type;
-
-        // 周波数を設定
-        oscillatorNode.frequency.value = frequency;
-        
-        // 接続：oscillatorNode => gainNode
-        gainNode.gain.value = volume / volume_divide;
-        oscillatorNode.connect(gainNode);
-
-        console.log(type + ", " + volume);
-        
-        // 再生
-        oscillatorNode.start(0);
-    }
-
-    function createAudio(){
-
-        // 音量：gainNode
-        volume = Math.random() / 2 + 0.5;
-        // 波形
-        type = rnd_wav();
-
-        // 乱数を返す
-        function rnd_wav(){
-            const wav = ['sine', 'square', 'sawtooth', 'triangle'];
-            return wav[Math.floor(Math.random() * 4)];
-        }
-    }
-</script>
-
-</body>
+    </body>
 </html>
